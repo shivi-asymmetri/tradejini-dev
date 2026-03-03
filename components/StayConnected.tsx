@@ -97,7 +97,7 @@ const StayConnectedPage = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
     },
   };
 
@@ -117,7 +117,7 @@ const StayConnectedPage = () => {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 1.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 1.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
     },
   };
 
@@ -126,7 +126,7 @@ const StayConnectedPage = () => {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 1.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 1.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
     },
   };
 
@@ -136,7 +136,7 @@ const StayConnectedPage = () => {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
     },
   };
 
@@ -149,7 +149,7 @@ const StayConnectedPage = () => {
       transition: {
         duration: 1.2,
         delay: 0.3,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       }
     },
   };
@@ -442,7 +442,7 @@ const StayConnectedPage = () => {
                           <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                           >
                             <Image
                               src={slide.image}
@@ -466,7 +466,7 @@ const StayConnectedPage = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
               className="flex items-center gap-3"
             >
               {slides.map((_, index) => (

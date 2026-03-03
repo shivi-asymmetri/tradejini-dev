@@ -22,7 +22,7 @@ const itemVariants = {
         y: 0,
         transition: {
             duration: 0.8,
-            ease: [0.16, 1, 0.3, 1],
+            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
         },
     },
 };
@@ -263,7 +263,7 @@ export default function ProductBanner() {
                                         }}
                                         transition={{
                                             duration: 1.5,
-                                            ease: [0.16, 1, 0.3, 1],
+                                            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
                                             delay: 0.4,
                                         }}
                                         alt="CubePlus Web Platform"

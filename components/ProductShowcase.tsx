@@ -1,158 +1,92 @@
 "use client"
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useState, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 
-const container = {
+const container : Variants = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.3,
-    },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.3, delayChildren: 0.3 } },
 };
 
-const rowContainer = {
+const rowContainer : Variants = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 };
 
-const rowItem = {
+const rowItem : Variants = {
   hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
 // Clean, smooth card reveal used everywhere
-const cardVariants = {
+const cardVariants : Variants = {
   hidden: {
     opacity: 0,
     scale: 1.02,
-    blur: "10px",
+    filter: "blur(10px)",
   },
   show: {
     opacity: 1,
     scale: 1,
-    blur: "0px",
+    filter: "blur(0px)",
     transition: {
       duration: 0.6,
       delay: 0.05,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
     },
   },
 };
 
-const imageVariants = {
+const imageVariants : Variants = {
   hidden: {
     opacity: 0,
     scale: 0.75,
     y: 40,
   },
-  show: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      delay: 0.15,
-      type: "spring",
-      stiffness: 120,
-      damping: 20,
-      mass: 1,
-    },
-  },
+  show: { opacity: 1, scale: 1, y: 0, transition: { delay: 0.15, type: "spring" as const, stiffness: 120, damping: 20, mass: 1 } },
 };
 
-const contentContainerVariants = {
+const contentContainerVariants : Variants = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
 };
 
-const contentVariants = {
+const contentVariants : Variants = {
   hidden: {
     opacity: 0,
     y: 20,
   },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
-const headingVariants = {
+const headingVariants : Variants = {
   hidden: {
     opacity: 0,
     y: 15,
   },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
-const textVariants = {
+const textVariants : Variants = {
   hidden: {
     opacity: 0,
     y: 12,
   },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
-const buttonVariants = {
+const buttonVariants : Variants = {
   hidden: {
     opacity: 0,
     scale: 0.9,
     y: 10,
   },
-  show: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      delay: 0.05,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+  show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
 };
 
 // Product data
-const products = [
+const products : Product[] = [
   {
     id: 'cubeplus-mobile',
     name: 'CubePlus Mobile',
@@ -225,7 +159,7 @@ const products = [
   }
 ];
 
-const carouselVariants = {
+const carouselVariants : Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 1000 : -1000,
     opacity: 0
@@ -241,6 +175,17 @@ const carouselVariants = {
     opacity: 0
   })
 };
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  activeImage: string;
+  disabledImage: string;
+  link: string;
+  type: string;
+}
 
 export default function ProductShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -666,7 +611,7 @@ export default function ProductShowcase() {
                       x: "-50%",
                       transition: {
                         delay: 0.2,
-                        type: "spring",
+                        type: "spring" as const,
                         stiffness: 120,
                         damping: 20,
                         mass: 1,

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const TradingTerminals = () => {
@@ -88,7 +88,7 @@ const TradingTerminals = () => {
   ];
 
   // Animation variants - smooth and slow animations
-  const cardVariantsLeft = {
+  const cardVariantsLeft: Variants = {
     hidden: {
       opacity: 0,
       x: -100,
@@ -101,12 +101,12 @@ const TradingTerminals = () => {
       transition: {
         duration: 1.0,
         delay: 0.2,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
   };
 
-  const cardVariantsRight = {
+  const cardVariantsRight: Variants = {
     hidden: {
       opacity: 0,
       x: 100,
@@ -119,12 +119,12 @@ const TradingTerminals = () => {
       transition: {
         duration: 1.0,
         delay: 0.2,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
   };
 
-  const contentVariants = {
+  const contentVariants: Variants = {
     hidden: {
       opacity: 0,
       y: 30,
@@ -134,12 +134,12 @@ const TradingTerminals = () => {
       y: 0,
       transition: {
         duration: 0.9,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
   };
 
-  const imageVariants = {
+  const imageVariants: Variants = {
     hidden: {
       scale: 0.9,
       y: 20,
@@ -149,7 +149,7 @@ const TradingTerminals = () => {
       y: 0,
       transition: {
         duration: 1.0,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
   };
@@ -170,7 +170,7 @@ const TradingTerminals = () => {
     }),
   };
 
-  const headerBottomVariants = {
+  const headerBottomVariants: Variants = {
     hidden: {
       opacity: 0,
       y: 50,
@@ -181,7 +181,7 @@ const TradingTerminals = () => {
       transition: {
         duration: 1.0,
         delay: 0.3,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
   };
@@ -213,7 +213,7 @@ const TradingTerminals = () => {
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: false, margin: "-100px" }}
-        transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
         className="mb-8 hidden max-w-4xl flex-col items-start gap-3 text-left md:flex md:items-center md:text-center md:mb-10 md:gap-5"
       >
         <h1 className="text-left md:text-center text-black/99 text-2xl font-semibold sm:text-4xl md:text-5xl">
@@ -329,7 +329,7 @@ const TradingTerminals = () => {
                 transition={{
                   duration: 1.0,
                   delay: 0.3 + index * 0.25,
-                  ease: [0.16, 1, 0.3, 1],
+                  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
                 }}
                 className="relative h-[350px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[550px] lg:h-[500px] lg:rounded-3xl"
                 style={{
@@ -358,7 +358,7 @@ const TradingTerminals = () => {
                     transition={{
                       duration: 0.9,
                       delay: 0.5 + index * 0.25,
-                      ease: [0.16, 1, 0.3, 1],
+                      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
                     }}
                     className="flex w-full max-w-lg flex-col gap-2 sm:gap-2.5"
                   >
@@ -382,7 +382,7 @@ const TradingTerminals = () => {
                     transition={{
                       duration: 1.0,
                       delay: 0.7 + index * 0.25,
-                      ease: [0.16, 1, 0.3, 1],
+                      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
                     }}
                     className="h-48 w-full max-w-lg overflow-hidden rounded-lg sm:h-64 md:h-72 lg:h-80 lg:rounded-xl"
                   >

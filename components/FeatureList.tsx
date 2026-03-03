@@ -3,109 +3,41 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent, Variants } from "framer-motion";
 
-const containerVariants = {
+const containerVariants : Variants= {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.25,
-      delayChildren: 0.3,
-    },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.25, delayChildren: 0.3 } },
 };
 
-const itemVariants = {
-  hidden: { 
-    opacity: 0, 
-    x: -20,
-  },
-  show: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+const itemVariants : Variants = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 };
 
-const itemBottomVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 50,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+const itemBottomVariants : Variants = {
+  hidden: { opacity: 0, y: 50 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 };
 
-const desktopCardVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 30,
-    scale: 0.95,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+const desktopCardVariants : Variants = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 };
 
-const desktopContainerVariants = {
+const desktopContainerVariants : Variants = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.3 } },
 };
 
-const mainContentVariants = {
-  hidden: { 
-    opacity: 0, 
-    x: -20,
-  },
-  show: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-      staggerChildren: 0.2,
-      delayChildren: 0.2,
-    },
-  },
+const mainContentVariants : Variants = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.2, delayChildren: 0.2 } },
 };
 
-const mainContentBottomVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 50,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-      staggerChildren: 0.2,
-      delayChildren: 0.2,
-    },
-  },
+const mainContentBottomVariants : Variants = {
+  hidden: { opacity: 0, y: 50 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.2, delayChildren: 0.2 } },
 };
 
 

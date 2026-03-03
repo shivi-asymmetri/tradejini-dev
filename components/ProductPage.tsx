@@ -8,93 +8,43 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import ProductBanner from "./ProductBanner";
+import { motion, Variants } from "framer-motion";
 import ProductBanner2 from "./ProductBanner2";
 
 export default function Products() {
-  const slideInRight = {
+  const slideInRight : Variants = {
     hidden: { opacity: 0, x: 50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 1.2,
-        delay: 0.3,
-        ease: [0.16, 1, 0.3, 1],
-      }
-    },
+    visible: { opacity: 1, x: 0, transition: { duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] } },
   };
 
-  const slideInRightVariants = {
+  const slideInRightVariants : Variants = {
     hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 1.2,
-        delay: 0.4,
-        ease: [0.16, 1, 0.3, 1],
-      }
-    },
+    visible: { opacity: 1, x: 0, transition: { duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] } },
   };
 
-  const slideInBottomVariants = {
+  const slideInBottomVariants : Variants = {
     hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.2,
-        delay: 0.4,
-        ease: [0.16, 1, 0.3, 1],
-      }
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] } },
   };
 
-  const heroContainer = {
+  const heroContainer : Variants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-        delayChildren: 0.3,
-      }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.3, delayChildren: 0.3 } },
   };
 
-  const heroTextContainer = {
+  const heroTextContainer : Variants  = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.25,
-        delayChildren: 0.4,
-      }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.25, delayChildren: 0.4 } },
   };
 
-  const heroItem = {
+  const heroItem : Variants = {
     hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.0,
-        ease: [0.16, 1, 0.3, 1],
-      }
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] } },
   };
 
-  const fadeInVariants = {
+  const fadeInVariants : Variants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1],
-      }
-    },
+    visible: { opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
   };
 
   return (
