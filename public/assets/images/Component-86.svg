@@ -1,0 +1,27 @@
+<svg width="336" height="305" viewBox="0 0 336 305" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_b_334_4929)">
+<rect x="0.11377" y="0.950684" width="335" height="304" rx="33.2621" fill="#4539A0" fill-opacity="0.05"/>
+<circle cx="182.289" cy="152.977" r="68.0905" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="113.671" cy="152.977" r="28.825" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="176.051" cy="152.976" r="64.5209" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="169.813" cy="152.977" r="60.9513" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="163.575" cy="152.977" r="57.3817" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="157.337" cy="152.977" r="53.8121" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="151.099" cy="152.976" r="50.2425" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="144.861" cy="152.976" r="46.673" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="138.623" cy="152.977" r="43.1034" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="132.385" cy="152.976" r="39.5338" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="126.147" cy="152.977" r="35.9642" stroke="#534A99" stroke-width="1.05494"/>
+<circle cx="119.909" cy="152.977" r="32.3946" stroke="#534A99" stroke-width="1.05494"/>
+<line x1="44.248" y1="155.305" x2="290.98" y2="155.305" stroke="#534A99" stroke-width="0.773672"/>
+<line x1="113.285" y1="279.058" x2="113.285" y2="32.3257" stroke="#534A99" stroke-width="0.773672"/>
+</g>
+<defs>
+<filter id="filter0_b_334_4929" x="-9.88623" y="-9.04932" width="355" height="324" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImageFix" stdDeviation="5"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_334_4929"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_334_4929" result="shape"/>
+</filter>
+</defs>
+</svg>

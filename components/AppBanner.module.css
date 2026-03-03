@@ -1,0 +1,386 @@
+.app-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 -8px 32px rgba(0, 0, 0, 0.15),
+    0 -4px 16px rgba(34, 134, 152, 0.1);
+  z-index: 2147483647;
+  padding: 18px;
+  padding-top: 35px;
+  transform: translateY(100%);
+  opacity: 0;
+  border-top: 4px solid #228698;
+  border-left: 2px solid rgba(0, 0, 0, 0.15);
+  border-right: 2px solid rgba(0, 0, 0, 0.15);
+  will-change: transform, opacity;
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+  border-radius: 25px 25px 0 0;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  overflow: visible;
+}
+
+/* Gray curves that are always visible */
+.app-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(34, 134, 152, 0.3) 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  border-radius: 25px 25px 0 0;
+  z-index: 1;
+  box-shadow:
+    0 -6px 20px rgba(0, 0, 0, 0.1),
+    0 -3px 10px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-bottom: none;
+}
+
+.app-banner::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  right: 15px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 20px 20px 0 0;
+  z-index: 2;
+  box-shadow:
+    0 -4px 12px rgba(0, 0, 0, 0.08),
+    0 -2px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom: none;
+}
+
+.app-banner.animate-in {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+.animate-out {
+  animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2147483647;
+}
+
+/* Remove the side decorative elements */
+.banner-content::before,
+.banner-content::after {
+  display: none;
+}
+
+.banner-icon-container {
+  position: relative;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.banner-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 12px rgba(0, 91, 108, 0.2);
+  overflow: hidden;
+}
+
+.banner-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.banner-text h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: -0.3px;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+.banner-text p {
+  margin: -2px 0 0 0;
+  font-size: 14px;
+  color: black;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+.banner-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 16px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2147483647;
+}
+
+.install-btn,
+.stay-btn {
+  position: relative;
+  z-index: 2147483647;
+  background-color: white;
+}
+
+.install-btn {
+  background: linear-gradient(85.17deg, #228698 -25.7%, #0b2c32 89.13%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 40px;
+  font-weight: 400;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 90px;
+  box-shadow: 0 4px 10px rgba(34, 134, 152, 0.3);
+  overflow: hidden;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+.install-btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transition: left 0.7s ease;
+}
+
+.install-btn:hover:before {
+  left: 100%;
+}
+
+.install-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(34, 134, 152, 0.4);
+}
+
+.install-btn.loading {
+  background: rgba(34, 134, 152, 0.7);
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.stay-btn {
+  background: rgba(245, 245, 245, 0.7);
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.stay-btn:hover {
+  background: rgba(235, 235, 235, 0.9);
+  transform: translateY(-2px);
+}
+
+.close-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  color: #666;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+  z-index: 2147483647;
+}
+
+.close-btn:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .app-banner {
+    background: rgba(30, 30, 35, 0.7);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .banner-text h3 {
+    color: black;
+    font-weight: bold;
+  }
+
+  .banner-text p {
+    color: black;
+    opacity: 0.8;
+  }
+
+  .stay-btn {
+    background: rgba(60, 60, 65, 0.7);
+    color: #f0f0f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stay-btn:hover {
+    background: rgba(70, 70, 75, 0.8);
+  }
+
+  .close-btn {
+    color: black;
+  }
+
+  .close-btn:hover {
+    color: #333;
+    transform: rotate(90deg);
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    50% {
+      box-shadow: 0 -8px 32px rgba(0, 91, 108, 0.3);
+    }
+
+    100% {
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+    }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .app-banner {
+    transition: opacity 0.3s ease;
+  }
+
+  .animate-in {
+    animation: none;
+  }
+
+  .install-btn:before,
+  .close-btn:hover {
+    transition: none;
+    transform: none;
+  }
+
+  .loading-spinner {
+    animation: none;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+  .banner-content {
+    flex-wrap: wrap;
+  }
+
+  .banner-text {
+    flex: 0 0 calc(100% - 68px);
+  }
+
+  .banner-buttons {
+    margin-left: 64px;
+    margin-top: 14px;
+  }
+}

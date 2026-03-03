@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background gradient -->
+    <rect width="1200" height="630" fill="url(#backgroundGradient)"/>
+    
+    <!-- Abstract geometric shapes -->
+    <path d="M0 0L400 200L200 400L0 300Z" fill="url(#shapeGradient1)" opacity="0.1"/>
+    <path d="M1200 630L800 430L1000 230L1200 330Z" fill="url(#shapeGradient2)" opacity="0.1"/>
+    
+    <!-- Main content container -->
+    <g transform="translate(100, 165)">
+        <!-- Logo -->
+        <g transform="scale(3)">
+            <g clip-path="url(#clip0_logo)">
+                <path d="M0 1.52246H27.9552L17.8033 11.5592H0V1.52246Z" fill="url(#paint0_linear_logo)"/>
+                <path d="M27.9552 1.52246L27.9552 29.4776L17.9185 29.4776L17.9185 11.4352L27.9552 1.52246Z" fill="url(#paint1_linear_logo)"/>
+                <path d="M0 1.52246L27.9551 29.4775H0V1.52246Z" fill="#1E8C51"/>
+            </g>
+            <path d="M44.4754 8.33623V9.55297H40.4056V23H38.9371V9.55297H34.8464V8.33623H44.4754Z" fill="#333333"/>
+            <!-- Rest of the TRADEJINI text -->
+        </g>
+    </g>
+    
+    <!-- Tagline -->
+    <text x="600" y="400" text-anchor="middle" class="tagline" fill="#333333" font-family="Inter" font-size="36" font-weight="600">
+        Your Trusted Trading Partner
+    </text>
+    
+    <!-- Decorative elements -->
+    <g transform="translate(900, 450)">
+        <path d="M0 0L50 -50L100 -25L150 -75" stroke="url(#chartGradient)" stroke-width="3" fill="none"/>
+    </g>
+    
+    <!-- Definitions -->
+    <defs>
+        <!-- Background gradient -->
+        <linearGradient id="backgroundGradient" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#f8fdfb"/>
+        </linearGradient>
+        
+        <!-- Shape gradients -->
+        <linearGradient id="shapeGradient1" x1="0" y1="0" x2="400" y2="400">
+            <stop offset="0%" stop-color="#18944A"/>
+            <stop offset="100%" stop-color="#86D3BB"/>
+        </linearGradient>
+        
+        <linearGradient id="shapeGradient2" x1="1200" y1="630" x2="800" y2="230">
+            <stop offset="0%" stop-color="#1E975D"/>
+            <stop offset="100%" stop-color="#86D3BB"/>
+        </linearGradient>
+        
+        <!-- Chart gradient -->
+        <linearGradient id="chartGradient" x1="0" y1="0" x2="150" y2="-75">
+            <stop offset="0%" stop-color="#18944A"/>
+            <stop offset="100%" stop-color="#86D3BB"/>
+        </linearGradient>
+        
+        <!-- Logo gradients -->
+        <linearGradient id="paint0_linear_logo" x1="-12.4898" y1="7.00624" x2="35.761" y2="6.54083" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#18944A"/>
+            <stop offset="1" stop-color="#86D3BB"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_logo" x1="22.9369" y1="28.6387" x2="22.9369" y2="13.1515" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1E975D"/>
+            <stop offset="1" stop-color="#86D3BB"/>
+        </linearGradient>
+        
+        <!-- Clip paths -->
+        <clipPath id="clip0_logo">
+            <rect y="1.52246" width="27.9552" height="27.9552" rx="3.28004" fill="white"/>
+        </clipPath>
+    </defs>
+</svg> 

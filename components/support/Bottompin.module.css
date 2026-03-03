@@ -1,0 +1,179 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes floatEmbedded {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+.arrow-icon {
+  width: 18px !important;
+  height: 20px !important;
+  min-width: 18px;
+  min-height: 20px;
+}
+
+@media (min-width: 768px) {
+  .arrow-icon {
+    width: 24px !important;
+    height: 28px !important;
+    min-width: 24px;
+    min-height: 28px;
+  }
+}
+
+/* Fixed position button styles */
+.fixedButton {
+  @apply fixed bottom-4 right-4 transition-all duration-300;
+  z-index: 9999;
+}
+
+/* Embedded button styles */
+.embeddedButton {
+  @apply transition-all duration-300;
+}
+
+/* Visibility states */
+.visible {
+  @apply translate-y-0 opacity-100;
+}
+
+.hidden {
+  @apply translate-y-10 opacity-0;
+}
+
+/* Button container */
+.buttonContainer {
+  @apply flex cursor-pointer items-center justify-center gap-1 rounded-lg bg-white shadow-[0_10px_10px_-6px_black] transition-all duration-200 hover:bg-gray-50 hover:shadow-[0_10px_20px_-1px_rgba(30,139,80,0.3)];
+  width: 100px;
+  height: 40px;
+}
+
+/* Add floating animation to fixed button when visible */
+.fixedButton.visible .buttonContainer {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Add subtle floating animation to embedded button when visible */
+.embeddedButton.visible .buttonContainer {
+  animation: floatEmbedded 4s ease-in-out infinite;
+}
+
+/* Enhanced hover effects - pause floating and add pulse */
+.fixedButton .buttonContainer:hover {
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
+.embeddedButton .buttonContainer:hover {
+  animation: pulse 0.8s ease-in-out infinite;
+  transform: scale(1.02);
+}
+
+/* Embedded button container - larger size */
+.embeddedButton .buttonContainer {
+  @apply md:h-[51px] md:w-[125px];
+}
+
+/* Arrow icon */
+.arrowIcon {
+  @apply h-5 w-5 text-[rgba(30,139,80,0.6)] transition-transform duration-200;
+}
+
+.buttonContainer:hover .arrowIcon {
+  @apply -translate-y-0.5;
+}
+
+/* Top button text */
+.topButton {
+  @apply mr-2 flex cursor-pointer items-center justify-center gap-1 border-none bg-transparent font-light text-black transition-colors duration-200 hover:text-green-700;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .buttonContainer {
+    width: 80px;
+    height: 35px;
+  }
+
+  .arrowIcon {
+    @apply h-4 w-4;
+  }
+
+  .topButton {
+    @apply text-sm;
+  }
+
+  .fixedButton {
+    @apply bottom-3 right-3;
+  }
+}
+
+/* Desktop enhancements */
+@media (min-width: 769px) {
+  .fixedButton .buttonContainer:hover {
+    @apply scale-105;
+  }
+
+  .embeddedButton .buttonContainer:hover {
+    transform: scale(1.02);
+  }
+}
+
+body.mobile-nav-open .fixedButton,
+body.mobile-nav-open .embeddedButton {
+  display: none !important;
+}
