@@ -228,8 +228,6 @@ export default function ProductBanner() {
                             >
                                 The Platform You Deserve.{" "}<span className="text-[#00BD67]">The Power You Need.</span>
                             </motion.h1>
-
-                            {/* Subtitle */}
                             <motion.p
                                 variants={itemVariants}
                                 className="mt-4 text-center text-sm md:text-base text-white/60"
@@ -244,7 +242,6 @@ export default function ProductBanner() {
                             <div className="relative h-[60svh] min-h-[320px] w-full overflow-hidden">
                                 <video
                                     className="h-full w-full object-cover"
-                                    src="https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/animation.webm"
                                     autoPlay
                                     loop
                                     muted
@@ -254,8 +251,22 @@ export default function ProductBanner() {
                                     style={{
                                         backgroundColor: 'transparent'
                                     }}
-                                />
+                                >
+                                    <source src="https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/animation-safari.mp4" type='video/mp4; codecs="hvc1"' />
+                                    <source src="https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/animation.webm" type="video/webm" />
+                                </video>
                             </div>
+
+                            {/* Mobile Signup CTA (below video) */}
+                            <motion.a
+                                variants={itemVariants}
+                                href="https://ekyc.tradejini.com/#/onboarding"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="my-6 text-center mx-auto flex items-center justify-center rounded-full bg-[#00BD67] px-6 py-3 text-sm font-semibold text-black transition-colors w-fit"
+                            >
+                                Get Started
+                            </motion.a>
                         </div>
 
                         {/* Scroll-based Image Carousel - centered in remaining space */}
