@@ -22,7 +22,7 @@ const itemVariants = {
         y: 0,
         transition: {
             duration: 0.8,
-            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+            ease: [0.16, 1, 0.3, 1],
         },
     },
 };
@@ -183,12 +183,12 @@ export default function ProductBanner() {
     return (
         // Tall scroll container - this creates the scroll space for sticky effect
         // Slightly extended height to allow extra scroll after the four images collapse
-        <div ref={containerRef} className="relative h-[260vh] w-full bg-[#000000]">
+        <div ref={containerRef} className="relative min-h-screen w-full bg-[#000000] md:h-[260vh]">
             {/* Sticky wrapper - stays fixed while scrolling through the container */}
-            <div className="sticky top-16 h-screen w-full overflow-hidden">
+            <div className="w-full overflow-visible md:sticky md:top-16 md:h-screen md:overflow-hidden">
                 {/* Banner Container */}
                 <div
-                    className="relative h-full w-full bg-[#000000] flex flex-col overflow-hidden"
+                    className="relative w-full bg-[#000000] flex flex-col overflow-hidden md:h-full"
                 >
                     {/* LightRays Background */}
                     <div className="absolute inset-0 z-0">
@@ -218,7 +218,7 @@ export default function ProductBanner() {
                     >
                         {/* Text content wrapper - fades on scroll */}
                         <motion.div
-                            style={{ opacity: textOpacity }}
+                            style={{ opacity: isMobile ? 1 : textOpacity }}
                             className="flex flex-col items-center"
                         >
                             {/* Heading */}
@@ -239,8 +239,23 @@ export default function ProductBanner() {
                             </motion.p>
                         </motion.div>
 
+                        {/* Mobile-only video (below text content) */}
+                        <div className="mt-8 w-full md:hidden">
+                            <div className="relative h-[60svh] min-h-[320px] w-full overflow-hidden">
+                                <video
+                                    className="h-full w-full object-cover"
+                                    src="https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/animation.webm"
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    preload="auto"
+                                />
+                            </div>
+                        </div>
+
                         {/* Scroll-based Image Carousel - centered in remaining space */}
-                        <div className="mt-8 md:mt-16 w-full max-w-6xl relative flex-1 min-h-[350px] sm:min-h-[450px] md:min-h-[550px] flex items-center justify-center">
+                        <div className="mt-8 md:mt-16 w-full max-w-6xl relative flex-1 min-h-[350px] sm:min-h-[450px] md:min-h-[550px] hidden md:flex items-center justify-center">
                             <div
                                 className="relative w-full h-[350px] sm:h-[450px] md:h-[550px] lg:h-[650px]"
                                 style={{ perspective: "1200px" }}
@@ -263,7 +278,7 @@ export default function ProductBanner() {
                                         }}
                                         transition={{
                                             duration: 1.5,
-                                            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                                            ease: [0.16, 1, 0.3, 1],
                                             delay: 0.4,
                                         }}
                                         alt="CubePlus Web Platform"
