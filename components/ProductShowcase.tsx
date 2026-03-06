@@ -1,92 +1,158 @@
 "use client"
 import Link from "next/link";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 
-const container : Variants = {
+const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.3, delayChildren: 0.3 } },
-};
-
-const rowContainer : Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
-};
-
-const rowItem : Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
-};
-
-// Clean, smooth card reveal used everywhere
-const cardVariants : Variants = {
-  hidden: {
-    opacity: 0,
-    scale: 1.02,
-    filter: "blur(10px)",
-  },
   show: {
     opacity: 1,
-    scale: 1,
-    filter: "blur(0px)",
     transition: {
-      duration: 0.6,
-      delay: 0.05,
-      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      staggerChildren: 0.3,
+      delayChildren: 0.3,
     },
   },
 };
 
-const imageVariants : Variants = {
+const rowContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const rowItem = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+// Clean, smooth card reveal used everywhere
+const cardVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 1.02,
+    blur: "10px",
+  },
+  show: {
+    opacity: 1,
+    scale: 1,
+    blur: "0px",
+    transition: {
+      duration: 0.6,
+      delay: 0.05,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+const imageVariants = {
   hidden: {
     opacity: 0,
     scale: 0.75,
     y: 40,
   },
-  show: { opacity: 1, scale: 1, y: 0, transition: { delay: 0.15, type: "spring" as const, stiffness: 120, damping: 20, mass: 1 } },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      delay: 0.15,
+      type: "spring",
+      stiffness: 120,
+      damping: 20,
+      mass: 1,
+    },
+  },
 };
 
-const contentContainerVariants : Variants = {
+const contentContainerVariants = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
 };
 
-const contentVariants : Variants = {
+const contentVariants = {
   hidden: {
     opacity: 0,
     y: 20,
   },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
-const headingVariants : Variants = {
+const headingVariants = {
   hidden: {
     opacity: 0,
     y: 15,
   },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
-const textVariants : Variants = {
+const textVariants = {
   hidden: {
     opacity: 0,
     y: 12,
   },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
-const buttonVariants : Variants = {
+const buttonVariants = {
   hidden: {
     opacity: 0,
     scale: 0.9,
     y: 10,
   },
-  show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      delay: 0.05,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
 // Product data
-const products : Product[] = [
+const products = [
   {
     id: 'cubeplus-mobile',
     name: 'CubePlus Mobile',
@@ -159,7 +225,7 @@ const products : Product[] = [
   }
 ];
 
-const carouselVariants : Variants = {
+const carouselVariants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 1000 : -1000,
     opacity: 0
@@ -175,17 +241,6 @@ const carouselVariants : Variants = {
     opacity: 0
   })
 };
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  activeImage: string;
-  disabledImage: string;
-  link: string;
-  type: string;
-}
 
 export default function ProductShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -236,11 +291,13 @@ export default function ProductShowcase() {
                       onClick={() => goToProduct(index)}
                       aria-label={`Go to ${product.name}`}
                     >
-                      <img
-                        src={isActive ? product.activeImage : product.disabledImage}
-                        alt={product.name}
-                        className="h-full w-full rounded-full object-contain"
-                      />
+                      <div className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center">
+                        <img
+                          src={isActive ? product.activeImage : product.disabledImage}
+                          alt={product.name}
+                          className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-contain"
+                        />
+                      </div>
                     </button>
                   );
                 })}
@@ -611,7 +668,7 @@ export default function ProductShowcase() {
                       x: "-50%",
                       transition: {
                         delay: 0.2,
-                        type: "spring" as const,
+                        type: "spring",
                         stiffness: 120,
                         damping: 20,
                         mass: 1,
