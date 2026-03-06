@@ -249,7 +249,11 @@ export default function ProductBanner() {
                                     loop
                                     muted
                                     playsInline
+                                    webkit-playsinline="true"
                                     preload="auto"
+                                    style={{
+                                        backgroundColor: 'transparent'
+                                    }}
                                 />
                             </div>
                         </div>
