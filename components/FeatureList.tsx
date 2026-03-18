@@ -3,41 +3,109 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { motion, useScroll, useTransform, useMotionValueEvent, Variants } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 
-const containerVariants : Variants= {
+const containerVariants = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.25, delayChildren: 0.3 } },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.25,
+      delayChildren: 0.3,
+    },
+  },
 };
 
-const itemVariants : Variants = {
-  hidden: { opacity: 0, x: -20 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+const itemVariants = {
+  hidden: { 
+    opacity: 0, 
+    x: -20,
+  },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
-const itemBottomVariants : Variants = {
-  hidden: { opacity: 0, y: 50 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+const itemBottomVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 50,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
-const desktopCardVariants : Variants = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+const desktopCardVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 30,
+    scale: 0.95,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
-const desktopContainerVariants : Variants = {
+const desktopContainerVariants = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.3 } },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
 };
 
-const mainContentVariants : Variants = {
-  hidden: { opacity: 0, x: -20 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.2, delayChildren: 0.2 } },
+const mainContentVariants = {
+  hidden: { 
+    opacity: 0, 
+    x: -20,
+  },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+      staggerChildren: 0.2,
+      delayChildren: 0.2,
+    },
+  },
 };
 
-const mainContentBottomVariants : Variants = {
-  hidden: { opacity: 0, y: 50 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.2, delayChildren: 0.2 } },
+const mainContentBottomVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 50,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+      staggerChildren: 0.2,
+      delayChildren: 0.2,
+    },
+  },
 };
 
 
@@ -230,7 +298,7 @@ const FeaturesGrid = () => {
                       className={`group relative flex w-[280px] sm:w-[320px] md:w-[360px] lg:min-h-[400px] bg-[#FCFCFC]/3 backdrop-blur-[28px] flex-col overflow-hidden rounded-sm border lg:px-6 lg:pb-6 lg:pt-8 p-6 transition-all duration-300 ${
                         activeCardIndex === index
                           ? "border-[#058172] shadow-[0_0_30px_rgba(0,255,136,0.15)] scale-105"
-                          : "border-white/10 hover:border-[#058172] hover:shadow-[0_0_30px_rgba(0,255,136,0.15)]"
+                          : "border-white/10 scale-90 blur-sm"
                       }`}
                     >
                     {/* Number Label - Top Left */}

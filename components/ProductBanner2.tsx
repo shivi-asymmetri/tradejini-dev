@@ -75,7 +75,10 @@ export default function ProductBanner() {
         ["blur(0px)", "blur(6px)", "blur(6px)"]
     );
     const rotateX1 = useTransform(smoothScrollYProgress, [0.4, 0.5], [0, 0]);
-    const y1 = useTransform(smoothScrollYProgress, [0, 0.15, 0.2, 0.6], [isMobile ? -80 : -120, isMobile ? -160 : -180, isMobile ? -200 : -200, isMobile ? -200 : -200]);
+    const y1 = useTransform(smoothScrollYProgress, [0, 0.15, 0.2, 0.6], [isMobile ? -80 : -90, isMobile ? -160 : -180, isMobile ? -200 : -200, isMobile ? -200 : -200]);
+
+    // Mobile video: same upward animation as desktop image
+    const mobileVideoY = useTransform(smoothScrollYProgress, [0, 0.15, 0.25, 0.4], [0, -40, -100, -200]);
 
     // Four emerging images: appear more gradually WITH image 1, then remain visible
     // Softer emergence: spread over a wider scroll range so it doesn't feel sudden,
@@ -183,12 +186,12 @@ export default function ProductBanner() {
     return (
         // Tall scroll container - this creates the scroll space for sticky effect
         // Slightly extended height to allow extra scroll after the four images collapse
-        <div ref={containerRef} className="relative min-h-screen w-full bg-[#000000] md:h-[260vh]">
+        <div ref={containerRef} className="relative min-h-[200vh] w-full bg-[#000000] md:h-[260vh]">
             {/* Sticky wrapper - stays fixed while scrolling through the container */}
-            <div className="w-full overflow-visible md:sticky md:top-16 md:h-screen md:overflow-hidden">
+            <div className="sticky top-16 h-screen w-full overflow-hidden">
                 {/* Banner Container */}
                 <div
-                    className="relative w-full bg-[#000000] flex flex-col overflow-hidden md:h-full"
+                    className="relative w-full h-full bg-[#000000] flex flex-col overflow-hidden"
                 >
                     {/* LightRays Background */}
                     <div className="absolute inset-0 z-0">
@@ -216,9 +219,9 @@ export default function ProductBanner() {
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.3 }}
                     >
-                        {/* Text content wrapper - fades on scroll */}
+                        {/* Text content wrapper - fades on scroll (desktop and mobile) */}
                         <motion.div
-                            style={{ opacity: isMobile ? 1 : textOpacity }}
+                            style={{ opacity: textOpacity }}
                             className="flex flex-col items-center"
                         >
                             {/* Heading */}
@@ -237,9 +240,9 @@ export default function ProductBanner() {
                             </motion.p>
                         </motion.div>
 
-                        {/* Mobile-only video (below text content) */}
-                        <div className="mt-8 w-full md:hidden">
-                            <div className="relative h-[60svh] min-h-[320px] w-full overflow-hidden">
+                        {/* Mobile-only video (below text content) - same upward animation as desktop image */}
+                        <motion.div className="mt-8 w-full md:hidden" style={{ y: mobileVideoY }}>
+                            <div className="relative h-[60svh] min-h-[560px] w-full overflow-hidden">
                                 <video
                                     className="h-full w-full object-cover"
                                     autoPlay
@@ -265,9 +268,9 @@ export default function ProductBanner() {
                                 rel="noreferrer"
                                 className="my-6 text-center mx-auto flex items-center justify-center rounded-full bg-[#00BD67] px-6 py-3 text-sm font-semibold text-black transition-colors w-fit"
                             >
-                                Get Started
+                                Try Now
                             </motion.a>
-                        </div>
+                        </motion.div>
 
                         {/* Scroll-based Image Carousel - centered in remaining space */}
                         <div className="mt-8 md:mt-16 w-full max-w-6xl relative flex-1 min-h-[350px] sm:min-h-[450px] md:min-h-[550px] hidden md:flex items-center justify-center">
@@ -305,7 +308,7 @@ export default function ProductBanner() {
                                             filter: filter1,
                                             transformStyle: "preserve-3d",
                                         }}
-                                        className="w-[85%] h-auto object-contain drop-shadow-2xl will-change-transform origin-center"
+                                        className="w-[100%] h-auto object-contain drop-shadow-2xl will-change-transform origin-center"
                                     />
                                 </div>
 

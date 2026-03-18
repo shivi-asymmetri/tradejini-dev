@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const TradingTerminals = () => {
@@ -53,6 +53,8 @@ const TradingTerminals = () => {
       colors: "#0a2d28, #0a2d28, #0d0d0d, #047a6b, #0a5a4d",
       termColor: "#3db5a8",
       image: "/listings/terminal-1.png",
+      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.webm",
+      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.mp4",
       animation: "gradientAnimationBlue",
     },
     {
@@ -64,6 +66,8 @@ const TradingTerminals = () => {
       termColor: "#8ba3e8",
       image: "/listings/terminal-2.png",
       animation: "gradientAnimationPurple",
+      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-2.webm",
+      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-2.mp4",
     },
     {
       title: "Decade",
@@ -73,6 +77,8 @@ const TradingTerminals = () => {
       colors: "#0f3a45, #0f3a45, #0d0d0d, #05a8d6, #2a8fa8",
       termColor: "#05a8d6",
       image: "/listings/terminal-3.png",
+      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-3.webm",
+      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-3.mp4",
       animation: "gradientAnimationLightGreen",
     },
     {
@@ -83,12 +89,14 @@ const TradingTerminals = () => {
       colors: "#1f4028, #1f4028, #0d0d0d, #1fb03a, #188f42",
       termColor: "#2dc557",
       image: "/listings/terminal-4.png",
+      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-4.webm",
+      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-4.mp4",
       animation: "gradientAnimationGreen",
     },
   ];
 
   // Animation variants - smooth and slow animations
-  const cardVariantsLeft: Variants = {
+  const cardVariantsLeft = {
     hidden: {
       opacity: 0,
       x: -100,
@@ -101,12 +109,12 @@ const TradingTerminals = () => {
       transition: {
         duration: 1.0,
         delay: 0.2,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
 
-  const cardVariantsRight: Variants = {
+  const cardVariantsRight = {
     hidden: {
       opacity: 0,
       x: 100,
@@ -119,12 +127,12 @@ const TradingTerminals = () => {
       transition: {
         duration: 1.0,
         delay: 0.2,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
 
-  const contentVariants: Variants = {
+  const contentVariants = {
     hidden: {
       opacity: 0,
       y: 30,
@@ -134,12 +142,12 @@ const TradingTerminals = () => {
       y: 0,
       transition: {
         duration: 0.9,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
 
-  const imageVariants: Variants = {
+  const imageVariants = {
     hidden: {
       scale: 0.9,
       y: 20,
@@ -149,7 +157,7 @@ const TradingTerminals = () => {
       y: 0,
       transition: {
         duration: 1.0,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -170,7 +178,7 @@ const TradingTerminals = () => {
     }),
   };
 
-  const headerBottomVariants: Variants = {
+  const headerBottomVariants = {
     hidden: {
       opacity: 0,
       y: 50,
@@ -181,7 +189,7 @@ const TradingTerminals = () => {
       transition: {
         duration: 1.0,
         delay: 0.3,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -213,7 +221,7 @@ const TradingTerminals = () => {
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: false, margin: "-100px" }}
-        transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+        transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
         className="mb-8 hidden max-w-4xl flex-col items-start gap-3 text-left md:flex md:items-center md:text-center md:mb-10 md:gap-5"
       >
         <h1 className="text-left md:text-center text-black/99 text-2xl font-semibold sm:text-4xl md:text-5xl">
@@ -262,7 +270,7 @@ const TradingTerminals = () => {
               ></div>
 
               {/* Content */}
-              <div className="relative z-10 flex h-full flex-col items-center justify-center gap-6 px-6 sm:gap-8 sm:px-8">
+              <div className="relative z-10 flex h-full flex-col items-center justify-center gap-0 px-6 sm:px-8">
                 <div className="flex w-full max-w-md flex-col gap-2 sm:gap-2.5">
                   <h3 className="text-xl font-semibold text-white sm:text-2xl">
                     {activeTerminal.title}{" "}
@@ -280,11 +288,21 @@ const TradingTerminals = () => {
 
                 {/* Image */}
                 <div className="h-48 w-full max-w-lg overflow-hidden rounded-lg sm:h-64">
-                  <img
-                    src={activeTerminal.image}
-                    alt={`${activeTerminal.title} ${activeTerminal.highlight}`}
-                    className="h-full w-full object-contain"
-                  />
+                  <video
+                    className="h-full w-full object-cover"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      webkit-playsinline="true"
+                      preload="auto"
+                      style={{
+                          backgroundColor: 'transparent'
+                      }}
+                  >
+                      <source src={activeTerminal.mp4} type='video/mp4; codecs="hvc1"' />
+                      <source src={activeTerminal.webm} type="video/webm" />
+                  </video>
                 </div>
               </div>
             </motion.div>
@@ -329,7 +347,7 @@ const TradingTerminals = () => {
                 transition={{
                   duration: 1.0,
                   delay: 0.3 + index * 0.25,
-                  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                  ease: [0.16, 1, 0.3, 1],
                 }}
                 className="relative h-[350px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[550px] lg:h-[500px] lg:rounded-3xl"
                 style={{
@@ -352,17 +370,17 @@ const TradingTerminals = () => {
                 ></div>
 
                 {/* Content */}
-                <div className="relative z-10 flex h-full flex-col items-center justify-center gap-6 p-8 text-center sm:gap-8 md:gap-10 md:text-start">
+                <div className="relative z-10 p-6 flex h-full flex-col items-center justify-center gap-0 text-center md:text-start">
                   <motion.div
                     variants={contentVariants}
                     transition={{
                       duration: 0.9,
                       delay: 0.5 + index * 0.25,
-                      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                      ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="flex w-full max-w-lg flex-col gap-2 sm:gap-2.5"
+                    className="flex w-full flex-col gap-2 sm:gap-2.5"
                   >
-                    <h3 className="text-xl font-semibold text-white sm:text-2xl">
+                    <h3 className="text-xl font-semibold text-white sm:text-2xl px-4">
                       {terminal.title}{" "}
                       <span
                         style={{ color: terminal.termColor }}
@@ -371,27 +389,26 @@ const TradingTerminals = () => {
                         {terminal.highlight}
                       </span>
                     </h3>
-                    <p className="text-sm font-medium leading-relaxed text-white/80 sm:text-base md:text-lg lg:text-xl">
+                    <p className="text-sm font-medium px-4 leading-relaxed text-white/80 sm:text-base md:text-lg lg:text-xl">
                       {terminal.description}
                     </p>
                   </motion.div>
 
                   {/* Image */}
-                  <motion.div
-                    variants={imageVariants}
-                    transition={{
-                      duration: 1.0,
-                      delay: 0.7 + index * 0.25,
-                      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                  <video
+                    className="h-full w-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    style={{
+                      backgroundColor: "transparent",
                     }}
-                    className="h-48 w-full max-w-lg overflow-hidden rounded-lg sm:h-64 md:h-72 lg:h-80 lg:rounded-xl"
                   >
-                    <img
-                      src={terminal.image}
-                      alt={`${terminal.title} ${terminal.highlight}`}
-                      className="h-full w-full object-contain rounded-xl"
-                    />
-                  </motion.div>
+                    <source src={terminal.mp4} type='video/mp4; codecs="hvc1"' />
+                    <source src={terminal.webm} type="video/webm" />
+                  </video>
                 </div>
               </motion.div>
             ))}

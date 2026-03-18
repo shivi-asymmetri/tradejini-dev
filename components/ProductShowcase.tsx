@@ -208,7 +208,7 @@ const products = [
     name: 'NxtOption',
     description: 'Your dedicated options trading platform, built for precision and speed, tailored for professional options traders',
     image: '/listings/nxtoption.webp',
-    activeImage: '/listings/product_icons/active-6-icon.png',
+    activeImage: '/listings/product_icons/active-7-icon.png',
     disabledImage: '/listings/product_icons/disabled-6.png',
     link: 'https://app.nxtoption.com/auth/login',
     type: 'nxtoption'
@@ -218,7 +218,7 @@ const products = [
     name: 'EKYC2.0',
     description: 'Open your account in less than 5 minutes with our proprietary EKYC solution',
     image: '/listings/eykc2.webp',
-    activeImage: '/listings/product_icons/active-7-icon.png',
+    activeImage: '/listings/product_icons/active-6-icon.png',
     disabledImage: '/listings/product_icons/disabled-7.png',
     link: 'https://ekyc.tradejini.com/#/onboarding',
     type: 'ekyc'
@@ -384,7 +384,7 @@ export default function ProductShowcase() {
                     <img
                       src="/cubeplus-web.png"
                       alt="CubePlus Web Platform"
-                      className="absolute right-0 bottom-0 w-[100%] h-auto object-cover"
+                      className="absolute right-0 bottom-0 md:-bottom-10 w-[100%] h-auto object-cover"
                     />
                   </div>
                 </Link>
@@ -427,7 +427,7 @@ export default function ProductShowcase() {
                     <img
                       src="/api-2.png"
                       alt="API Code"
-                      className="absolute right-0 bottom-0 w-[100%] h-auto object-cover"
+                      className="absolute right-0 md:-bottom-16 bottom-0 w-[100%] h-auto object-cover"
                     />
                   </div>
                 </Link>
@@ -469,7 +469,7 @@ export default function ProductShowcase() {
                     <img
                       src="/listings/mutual-funds.png"
                       alt="Mutual Funds"
-                      className="absolute right-0 bottom-0 w-[65%] h-auto object-cover"
+                      className="absolute right-0 md:-bottom-16 bottom-0 w-[65%] h-auto object-cover"
                     />
                   </div>
                 </Link>
@@ -553,7 +553,7 @@ export default function ProductShowcase() {
                     <img
                       src="/listings/nxtoption.png"
                       alt="NxtOption Platform"
-                      className="absolute right-0 bottom-0 w-[80%] h-auto object-contain"
+                      className="absolute right-0 md:-bottom-20 bottom-0 w-[80%] h-auto object-contain"
                     />
                   </div>
                 </Link>
@@ -595,7 +595,7 @@ export default function ProductShowcase() {
                     <img
                       src="/ekyc.png"
                       alt="EKYC 2.0 Platform"
-                      className="absolute right-0 bottom-0 w-[100%] h-auto object-contain"
+                      className="absolute right-0 md:-bottom-10 bottom-0 w-[100%] h-auto object-contain"
                     />
                   </div>
                 </Link>
