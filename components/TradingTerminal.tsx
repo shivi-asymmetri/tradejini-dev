@@ -1,200 +1,312 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
+type Terminal = {
+  title: string;
+  highlight: string;
+  description: string;
+  colors: string;
+  termColor: string;
+  image: string;
+  webm: string;
+  mp4: string;
+};
+
+const REVEAL_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const REVEAL_DURATION = 0.85;
+const HEADER_DURATION = 0.9;
+const REVEAL_VIEWPORT = { once: false, amount: 0.2 };
+const CARD_VIEWPORT = { once: false, amount: 0.18 };
+
+const TERMINALS: Terminal[] = [
+  {
+    title: "Scalper",
+    highlight: "Terminal",
+    description:
+      "One-click order execution with ultra-low latency, built for scalpers who trade in split seconds.",
+    colors: "#10201d 0%, #0b5f54 100%",
+    termColor: "#3db5a8",
+    image: "/listings/terminal-1.png",
+    webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.webm",
+    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.mp4",
+  },
+  {
+    title: "Option",
+    highlight: "Terminal",
+    description:
+      "Build, analyze, and execute strategies with Greeks, OI and pay-off charts on a single screen.",
+    colors: "#1a2030 0%, #5569a8 100%",
+    termColor: "#8ba3e8",
+    image: "/listings/terminal-2.png",
+    webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-2.webm",
+    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-2.mp4",
+  },
+  {
+    title: "Decade",
+    highlight: "View",
+    description:
+      "Explore over 10 years of company history, financials, and performance metrics",
+    colors: "#13303a 0%, #1e89ab 100%",
+    termColor: "#05a8d6",
+    image: "/listings/terminal-3.png",
+    webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-3.webm",
+    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-3.mp4",
+  },
+  {
+    title: "Chart",
+    highlight: "Terminal",
+    description:
+      "Trade straight from charts with pro grade, indicators, multi chart layout, drawing tools, and one-click execution.",
+    colors: "#1b2f20 0%, #2a8a42 100%",
+    termColor: "#2dc557",
+    image: "/listings/terminal-4.png",
+    webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-4.webm",
+    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-4.mp4",
+  },
+];
+
+const cardVariantsLeft = {
+  hidden: {
+    opacity: 0,
+    x: -72,
+    scale: 0.98,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: REVEAL_DURATION,
+      delay: 0.12,
+      ease: REVEAL_EASE,
+    },
+  },
+};
+
+const cardVariantsRight = {
+  hidden: {
+    opacity: 0,
+    x: 72,
+    scale: 0.98,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: REVEAL_DURATION,
+      delay: 0.12,
+      ease: REVEAL_EASE,
+    },
+  },
+};
+
+const contentVariants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.75,
+      ease: REVEAL_EASE,
+    },
+  },
+};
+
+const carouselVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 120 : -120,
+    opacity: 0,
+    scale: 0.99,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -120 : 120,
+    opacity: 0,
+    scale: 0.99,
+  }),
+};
+
+const headerBottomVariants = {
+  hidden: {
+    opacity: 0,
+    y: 36,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: HEADER_DURATION,
+      delay: 0.12,
+      ease: REVEAL_EASE,
+    },
+  },
+};
+
+const surfaceMotionStyle = {
+  willChange: "transform, opacity",
+  transform: "translateZ(0)",
+  backfaceVisibility: "hidden" as const,
+};
+
+const getTerminalSurfaceStyle = (terminal: Terminal) => ({
+  ...surfaceMotionStyle,
+  backgroundImage: `linear-gradient(298deg, ${terminal.colors})`,
+  backgroundColor: "#0b1012",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+});
+
+const getGlowStyle = (terminal: Terminal) => ({
+  background: `radial-gradient(ellipse 620px 620px at 50% 120%, ${terminal.termColor}25 0%, transparent 50%),
+               radial-gradient(ellipse 620px 620px at -20% -30%, ${terminal.termColor}15 0%, transparent 50%),
+               radial-gradient(ellipse 620px 620px at 120% -30%, ${terminal.termColor}15 0%, transparent 50%)`,
+  mixBlendMode: "screen" as const,
+  opacity: 0.35,
+  filter: "blur(80px)",
+  transform: "translateZ(0)",
+  pointerEvents: "none" as const,
+});
+
+const TerminalVideo = memo(function TerminalVideo({
+  terminal,
+  className,
+  preload = "metadata",
+}: {
+  terminal: Terminal;
+  className: string;
+  preload?: "none" | "metadata" | "auto";
+}) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const isInView = useInView(videoRef, { amount: 0.2, once: false });
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    if (isInView) {
+      void video.play().catch(() => {});
+      return;
+    }
+
+    video.pause();
+  }, [isInView, terminal.mp4, terminal.webm]);
+
+  return (
+    <video
+      ref={videoRef}
+      className={className}
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload={preload}
+      poster={terminal.image}
+      disablePictureInPicture
+      style={{
+        backgroundColor: "transparent",
+        willChange: "transform",
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
+      }}
+    >
+      <source src={terminal.mp4} type='video/mp4; codecs="hvc1"' />
+      <source src={terminal.webm} type="video/webm" />
+    </video>
+  );
+});
+
+const DesktopTerminalCard = memo(function DesktopTerminalCard({
+  terminal,
+  index,
+}: {
+  terminal: Terminal;
+  index: number;
+}) {
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={CARD_VIEWPORT}
+      variants={index === 0 ? cardVariantsLeft : cardVariantsRight}
+      transition={{
+        duration: REVEAL_DURATION,
+        delay: 0.18 + index * 0.14,
+        ease: REVEAL_EASE,
+      }}
+      className="relative h-[350px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[550px] lg:h-[500px] lg:rounded-3xl"
+      style={getTerminalSurfaceStyle(terminal)}
+    >
+      <div className="absolute inset-0" style={getGlowStyle(terminal)}></div>
+
+      <div className="relative z-10 flex h-full flex-col items-center justify-center gap-0 p-6 text-center md:text-start">
+        <motion.div
+          variants={contentVariants}
+          transition={{
+            duration: 0.75,
+            delay: 0.28 + index * 0.12,
+            ease: REVEAL_EASE,
+          }}
+          className="flex w-full flex-col gap-2 sm:gap-2.5"
+          style={surfaceMotionStyle}
+        >
+          <h3 className="px-4 text-xl font-semibold text-white sm:text-2xl">
+            {terminal.title}{" "}
+            <span
+              style={{ color: terminal.termColor }}
+              className="drop-shadow-[0_0_6px_rgba(0,0,0,0.6)]"
+            >
+              {terminal.highlight}
+            </span>
+          </h3>
+          <p className="px-4 text-sm font-medium leading-relaxed text-white/80 sm:text-base md:text-lg lg:text-xl">
+            {terminal.description}
+          </p>
+        </motion.div>
+
+        <TerminalVideo
+          terminal={terminal}
+          className="h-full w-full object-cover"
+          preload="metadata"
+        />
+      </div>
+    </motion.div>
+  );
+});
 
 const TradingTerminals = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0); // 1 for next, -1 for previous
 
-  // Auto-play functionality
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDirection(1);
-      setActiveIndex((prevIndex) => {
-        const nextIndex = prevIndex + 1;
-        if (nextIndex >= terminals.length) return 0;
-        return nextIndex;
-      });
-    }, 4000); // Change slide every 4 seconds
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     setDirection(1);
     setActiveIndex((prevIndex) => {
       const nextIndex = prevIndex + 1;
-      if (nextIndex >= terminals.length) return 0;
+      if (nextIndex >= TERMINALS.length) return 0;
       return nextIndex;
     });
-  };
+  }, []);
 
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     setDirection(-1);
     setActiveIndex((prevIndex) => {
       const nextIndex = prevIndex - 1;
-      if (nextIndex < 0) return terminals.length - 1;
+      if (nextIndex < 0) return TERMINALS.length - 1;
       return nextIndex;
     });
-  };
+  }, []);
 
-  const goToSlide = (index: number) => {
-    setActiveIndex(index);
-  };
-
-  const terminals = [
-    {
-      title: "Scalper",
-      highlight: "Terminal",
-      description:
-        "One-click order execution with ultra-low latency, built for scalpers who trade in split seconds.",
-      colors: "#0a2d28, #0a2d28, #0d0d0d, #047a6b, #0a5a4d",
-      termColor: "#3db5a8",
-      image: "/listings/terminal-1.png",
-      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.webm",
-      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.mp4",
-      animation: "gradientAnimationBlue",
-    },
-    {
-      title: "Option",
-      highlight: "Terminal",
-      description:
-        "Build, analyze, and execute strategies with Greeks, OI and pay-off charts on a single screen.",
-      colors: "#1f2638, #1f2638, #0d0d0d, #3d4f85, #2d3858",
-      termColor: "#8ba3e8",
-      image: "/listings/terminal-2.png",
-      animation: "gradientAnimationPurple",
-      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-2.webm",
-      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-2.mp4",
-    },
-    {
-      title: "Decade",
-      highlight: "View",
-      description:
-        "Explore over 10 years of company history, financials, and performance metrics",
-      colors: "#0f3a45, #0f3a45, #0d0d0d, #05a8d6, #2a8fa8",
-      termColor: "#05a8d6",
-      image: "/listings/terminal-3.png",
-      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-3.webm",
-      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-3.mp4",
-      animation: "gradientAnimationLightGreen",
-    },
-    {
-      title: "Chart",
-      highlight: "Terminal",
-      description:
-        "Trade straight from charts with pro grade, indicators, multi chart layout, drawing tools, and one-click execution.",
-      colors: "#1f4028, #1f4028, #0d0d0d, #1fb03a, #188f42",
-      termColor: "#2dc557",
-      image: "/listings/terminal-4.png",
-      webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-4.webm",
-      mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-4.mp4",
-      animation: "gradientAnimationGreen",
-    },
-  ];
-
-  // Animation variants - smooth and slow animations
-  const cardVariantsLeft = {
-    hidden: {
-      opacity: 0,
-      x: -100,
-      scale: 0.95,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      transition: {
-        duration: 1.0,
-        delay: 0.2,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
-
-  const cardVariantsRight = {
-    hidden: {
-      opacity: 0,
-      x: 100,
-      scale: 0.95,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      transition: {
-        duration: 1.0,
-        delay: 0.2,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
-
-  const contentVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.9,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
-
-  const imageVariants = {
-    hidden: {
-      scale: 0.9,
-      y: 20,
-    },
-    visible: {
-      scale: 1,
-      y: 0,
-      transition: {
-        duration: 1.0,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
-
-  // Carousel slide variants
-  const carouselVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction > 0 ? -300 : 300,
-      opacity: 0,
-    }),
-  };
-
-  const headerBottomVariants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.0,
-        delay: 0.3,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
-
-  const activeTerminal = terminals[activeIndex];
+  const activeTerminal = TERMINALS[activeIndex];
 
   return (
     <div className="flex flex-col items-center bg-white px-4 pt-6 sm:px-6 md:px-8 md:pt-20">
@@ -203,9 +315,10 @@ const TradingTerminals = () => {
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, margin: "-100px" }}
+        viewport={REVEAL_VIEWPORT}
         variants={headerBottomVariants}
         className="mb-8 flex max-w-4xl flex-col items-start gap-3 text-left md:hidden"
+        style={surfaceMotionStyle}
       >
         <h1 className="text-left text-black/99 text-2xl font-semibold sm:text-4xl">
           Dedicated Trading Terminals
@@ -220,9 +333,10 @@ const TradingTerminals = () => {
       <motion.div
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: false, margin: "-100px" }}
-        transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        viewport={REVEAL_VIEWPORT}
+        transition={{ duration: HEADER_DURATION, delay: 0.12, ease: REVEAL_EASE }}
         className="mb-8 hidden max-w-4xl flex-col items-start gap-3 text-left md:flex md:items-center md:text-center md:mb-10 md:gap-5"
+        style={surfaceMotionStyle}
       >
         <h1 className="text-left md:text-center text-black/99 text-2xl font-semibold sm:text-4xl md:text-5xl">
           Dedicated Trading Terminals
@@ -237,76 +351,64 @@ const TradingTerminals = () => {
       <div className="lg:hidden w-full max-w-[1300px]">
         <div className="relative">
           {/* Carousel Card */}
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={activeIndex}
-              custom={direction}
-              variants={carouselVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.3 },
-              }}
-              className="relative h-[400px] w-full overflow-hidden rounded-2xl"
-              style={{
-                backgroundImage: `linear-gradient(298deg, ${activeTerminal.colors})`,
-                backgroundSize: "300% 300%",
-                animation: `${activeTerminal.animation} 10s ease infinite`,
-              }}
-            >
-              {/* Soft glowing overlays */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `radial-gradient(ellipse 620px 620px at 50% 120%, ${activeTerminal.termColor}25 0%, transparent 50%),
-                               radial-gradient(ellipse 620px 620px at -20% -30%, ${activeTerminal.termColor}15 0%, transparent 50%),
-                               radial-gradient(ellipse 620px 620px at 120% -30%, ${activeTerminal.termColor}15 0%, transparent 50%)`,
-                  mixBlendMode: "screen",
-                  opacity: 0.35,
-                  filter: "blur(80px)",
+          <div className="relative h-[400px] w-full overflow-hidden rounded-2xl">
+            <AnimatePresence initial={false} custom={direction}>
+              <motion.div
+                key={activeIndex}
+                custom={direction}
+                variants={carouselVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: {
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 30,
+                    mass: 0.8,
+                    restDelta: 0.001,
+                  },
+                  opacity: { duration: 0.24, ease: REVEAL_EASE },
+                  scale: { duration: 0.24, ease: REVEAL_EASE },
                 }}
-              ></div>
+                className="absolute inset-0 overflow-hidden rounded-2xl"
+      style={getTerminalSurfaceStyle(activeTerminal)}
+              >
+                {/* Soft glowing overlays */}
+                <div
+                  className="absolute inset-0"
+                  style={getGlowStyle(activeTerminal)}
+                ></div>
 
-              {/* Content */}
-              <div className="relative z-10 flex h-full flex-col items-center justify-center gap-0 px-6 sm:px-8">
-                <div className="flex w-full max-w-md flex-col gap-2 sm:gap-2.5">
-                  <h3 className="text-xl font-semibold text-white sm:text-2xl">
-                    {activeTerminal.title}{" "}
-                    <span
-                      style={{ color: activeTerminal.termColor }}
-                      className="drop-shadow-[0_0_6px_rgba(0,0,0,0.6)]"
-                    >
-                      {activeTerminal.highlight}
-                    </span>
-                  </h3>
-                  <p className="text-sm font-medium leading-relaxed text-white/80 sm:text-base">
-                    {activeTerminal.description}
-                  </p>
-                </div>
+                {/* Content */}
+                <div className="relative z-10 flex h-full flex-col items-center justify-center gap-0 px-6 sm:px-8">
+                  <div className="flex w-full max-w-md flex-col gap-2 sm:gap-2.5">
+                    <h3 className="text-xl font-semibold text-white sm:text-2xl">
+                      {activeTerminal.title}{" "}
+                      <span
+                        style={{ color: activeTerminal.termColor }}
+                        className="drop-shadow-[0_0_6px_rgba(0,0,0,0.6)]"
+                      >
+                        {activeTerminal.highlight}
+                      </span>
+                    </h3>
+                    <p className="text-sm font-medium leading-relaxed text-white/80 sm:text-base">
+                      {activeTerminal.description}
+                    </p>
+                  </div>
 
-                {/* Image */}
-                <div className="h-48 w-full max-w-lg overflow-hidden rounded-lg sm:h-64">
-                  <video
-                    className="h-full w-full object-cover"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      webkit-playsinline="true"
+                  {/* Image */}
+                  <div className="h-48 w-full max-w-lg overflow-hidden rounded-lg sm:h-64">
+                    <TerminalVideo
+                      terminal={activeTerminal}
+                      className="h-full w-full object-cover"
                       preload="auto"
-                      style={{
-                          backgroundColor: 'transparent'
-                      }}
-                  >
-                      <source src={activeTerminal.mp4} type='video/mp4; codecs="hvc1"' />
-                      <source src={activeTerminal.webm} type="video/webm" />
-                  </video>
+                    />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
           {/* Navigation Arrows - Bottom Left */}
           <div className="mt-8 flex items-center gap-2 z-20">
@@ -320,7 +422,7 @@ const TradingTerminals = () => {
             </button>
             <button
               onClick={goToNext}
-              disabled={activeIndex === terminals.length - 1}
+              disabled={activeIndex === TERMINALS.length - 1}
               className="flex items-center justify-center disabled:opacity-10 disabled:cursor-not-allowed w-10 h-10 rounded-full bg-[#058172] shadow-lg hover:bg-[#047a6b] transition-colors"
               aria-label="Next terminal"
             >
@@ -337,138 +439,16 @@ const TradingTerminals = () => {
             key={start}
             className="grid grid-cols-1 gap-4 md:gap-5 lg:grid-cols-2"
           >
-            {terminals.slice(start, start + 2).map((terminal, index) => (
-              <motion.div
-                key={index}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, margin: "-200px" }}
-                variants={index === 0 ? cardVariantsLeft : cardVariantsRight}
-                transition={{
-                  duration: 1.0,
-                  delay: 0.3 + index * 0.25,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="relative h-[350px] w-full overflow-hidden rounded-2xl sm:h-[500px] md:h-[550px] lg:h-[500px] lg:rounded-3xl"
-                style={{
-                  backgroundImage: `linear-gradient(298deg, ${terminal.colors})`,
-                  backgroundSize: "300% 300%",
-                  animation: `${terminal.animation} 10s ease infinite`,
-                }}
-              >
-                {/* Soft glowing overlays */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `radial-gradient(ellipse 620px 620px at 50% 120%, ${terminal.termColor}25 0%, transparent 50%),
-                                 radial-gradient(ellipse 620px 620px at -20% -30%, ${terminal.termColor}15 0%, transparent 50%),
-                                 radial-gradient(ellipse 620px 620px at 120% -30%, ${terminal.termColor}15 0%, transparent 50%)`,
-                    mixBlendMode: "screen",
-                    opacity: 0.35,
-                    filter: "blur(80px)",
-                  }}
-                ></div>
-
-                {/* Content */}
-                <div className="relative z-10 p-6 flex h-full flex-col items-center justify-center gap-0 text-center md:text-start">
-                  <motion.div
-                    variants={contentVariants}
-                    transition={{
-                      duration: 0.9,
-                      delay: 0.5 + index * 0.25,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="flex w-full flex-col gap-2 sm:gap-2.5"
-                  >
-                    <h3 className="text-xl font-semibold text-white sm:text-2xl px-4">
-                      {terminal.title}{" "}
-                      <span
-                        style={{ color: terminal.termColor }}
-                        className="drop-shadow-[0_0_6px_rgba(0,0,0,0.6)]"
-                      >
-                        {terminal.highlight}
-                      </span>
-                    </h3>
-                    <p className="text-sm font-medium px-4 leading-relaxed text-white/80 sm:text-base md:text-lg lg:text-xl">
-                      {terminal.description}
-                    </p>
-                  </motion.div>
-
-                  {/* Image */}
-                  <video
-                    className="h-full w-full object-cover"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="auto"
-                    style={{
-                      backgroundColor: "transparent",
-                    }}
-                  >
-                    <source src={terminal.mp4} type='video/mp4; codecs="hvc1"' />
-                    <source src={terminal.webm} type="video/webm" />
-                  </video>
-                </div>
-              </motion.div>
+            {TERMINALS.slice(start, start + 2).map((terminal, index) => (
+              <DesktopTerminalCard
+                key={terminal.title}
+                terminal={terminal}
+                index={index}
+              />
             ))}
           </div>
         ))}
       </div>
-
-      {/* Inline Keyframes */}
-      <style jsx>{`
-        @keyframes gradientAnimationBlue {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-        @keyframes gradientAnimationPurple {
-          0% {
-            background-position: 100% 0%;
-          }
-          50% {
-            background-position: 0% 100%;
-          }
-          100% {
-            background-position: 100% 0%;
-          }
-        }
-        @keyframes gradientAnimationLightGreen {
-          0% {
-            background-position: 50% 0%;
-          }
-          25% {
-            background-position: 0% 50%;
-          }
-          75% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 50% 0%;
-          }
-        }
-        @keyframes gradientAnimationGreen {
-          0% {
-            background-position: 0% 100%;
-          }
-          33% {
-            background-position: 100% 0%;
-          }
-          66% {
-            background-position: 0% 50%;
-          }
-          100% {
-            background-position: 0% 100%;
-          }
-        }
-      `}</style>
     </div>
   );
 };

@@ -61,7 +61,7 @@ export default function Footer() {
   }, [isDecoders]);
   return (
     <footer
-      className={`footer relative z-[99] px-5 pb-20 pt-20 md:px-10 md:pt-40 lg:px-20 xl:px-32 ${
+      className={`footer relative z-[99] px-5 pb-20 pt-50 md:px-10 md:pt-40 lg:px-20 xl:px-32 ${
         isDecoders && decodersDark
           ? "decoder-footer-bg"
           : "bg-gradient-to-b from-[#0C4E5B] via-black to-black"

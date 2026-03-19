@@ -186,11 +186,13 @@ const FeaturesGrid = () => {
 
   return (
     <div className="relative w-full py-12 md:py-32">
-      {/* Background image */}
+      {/* Background */}
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(180deg,#022827_0%,#011615_45%,#000000_100%)]" />
       <img
-        src="/listings/features-bg.png"
-        alt="Features background"
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover object-bottom"
+        src="/listings/features-wave.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 w-full object-contain object-top"
       />
       {/* Header Section */}
       <div className="relative z-10 px-4 md:px-8 lg:px-12 xl:px-16">
@@ -285,7 +287,7 @@ const FeaturesGrid = () => {
                 variants={desktopContainerVariants}
                 initial="hidden"
                 whileInView="show"
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ delay: 0.4 }}
               >
                 {features.map((feature, index) => (

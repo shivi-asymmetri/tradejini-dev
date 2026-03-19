@@ -1,3 +1,4 @@
+import Locomotive from "@/components/LocomotiveScroll";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,10 +6,16 @@ export const metadata: Metadata = {
   description:
     "CubePlus Web or Mobile for trading, NxtOption for options, Mutual Fund Jini for investments, and Sparc to analyze performance - everything tailored to your needs.",
 };
+
 export default function ProductsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+  return (
+  <>
+  <Locomotive />
+  {children}
+  </>
+  );
 }

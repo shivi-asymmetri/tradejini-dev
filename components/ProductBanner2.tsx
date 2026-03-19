@@ -32,15 +32,36 @@ const bannerImages = [
     "/listings/monitor.png",
 ];
 
+const retriggerViewport = {
+    once: false,
+    amount: 0.15,
+    margin: "0px 0px -10% 0px",
+};
+
+const animatedLayerStyle = {
+    willChange: "transform, opacity, filter",
+    backfaceVisibility: "hidden" as const,
+};
+
 export default function ProductBanner() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
+        if (typeof window === "undefined") return;
+
+        const mediaQuery = window.matchMedia("(max-width: 767px)");
+        const updateIsMobile = () => setIsMobile(mediaQuery.matches);
+
+        updateIsMobile();
+
+        if (typeof mediaQuery.addEventListener === "function") {
+            mediaQuery.addEventListener("change", updateIsMobile);
+            return () => mediaQuery.removeEventListener("change", updateIsMobile);
+        }
+
+        mediaQuery.addListener(updateIsMobile);
+        return () => mediaQuery.removeListener(updateIsMobile);
     }, []);
 
     const { scrollYProgress } = useScroll({
@@ -50,9 +71,10 @@ export default function ProductBanner() {
 
     // Smooth the scroll progress so animations ease in/out even if the user scrolls quickly
     const smoothScrollYProgress = useSpring(scrollYProgress, {
-        stiffness: 80,
-        damping: 24,
-        mass: 0.6,
+        stiffness: 140,
+        damping: 30,
+        mass: 0.45,
+        restDelta: 0.0008,
     });
 
     // Text opacity - fades out as soon as the main image reaches the top
@@ -79,6 +101,7 @@ export default function ProductBanner() {
 
     // Mobile video: same upward animation as desktop image
     const mobileVideoY = useTransform(smoothScrollYProgress, [0, 0.15, 0.25, 0.4], [0, -40, -100, -200]);
+    const mobileVideoScale = useTransform(smoothScrollYProgress, [0, 0.15, 0.25, 0.4], [1, 1.05, 1.1, 1.1]);
 
     // Four emerging images: appear more gradually WITH image 1, then remain visible
     // Softer emergence: spread over a wider scroll range so it doesn't feel sudden,
@@ -204,7 +227,7 @@ export default function ProductBanner() {
                             pulsating={false}
                             fadeDistance={3}
                             saturation={0.6}
-                            followMouse
+                            followMouse={!isMobile}
                             mouseInfluence={0.1}
                             noiseAmount={0}
                             distortion={0}
@@ -212,15 +235,13 @@ export default function ProductBanner() {
                     </div>
 
                     {/* Content */}
-                    <motion.div
-                        className="relative z-10 flex flex-col items-center pt-12 px-6 flex-1"
-                        variants={containerVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.3 }}
-                    >
+                    <div className="relative z-10 flex flex-col items-center pt-12 px-6 flex-1">
                         {/* Text content wrapper - fades on scroll (desktop and mobile) */}
                         <motion.div
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={retriggerViewport}
                             style={{ opacity: textOpacity }}
                             className="flex flex-col items-center"
                         >
@@ -241,18 +262,29 @@ export default function ProductBanner() {
                         </motion.div>
 
                         {/* Mobile-only video (below text content) - same upward animation as desktop image */}
-                        <motion.div className="mt-8 w-full md:hidden" style={{ y: mobileVideoY }}>
-                            <div className="relative h-[60svh] min-h-[560px] w-full overflow-hidden">
+                        <motion.div
+                            className="mt-8 w-full md:hidden"
+                            style={{ y: mobileVideoY, willChange: "transform", scale: mobileVideoScale }}
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={retriggerViewport}
+                        >
+                            <div className="relative h-[60svh] min-h-[520px] w-full overflow-hidden">
                                 <video
-                                    className="h-full w-full object-cover"
+                                    className="h-full w-full object-cover transform-gpu"
                                     autoPlay
                                     loop
                                     muted
                                     playsInline
                                     webkit-playsinline="true"
                                     preload="auto"
+                                    disablePictureInPicture
+                                    disableRemotePlayback
                                     style={{
-                                        backgroundColor: 'transparent'
+                                        backgroundColor: "transparent",
+                                        willChange: "transform",
+                                        backfaceVisibility: "hidden",
                                     }}
                                 >
                                     <source src="https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/animation-safari.mp4" type='video/mp4; codecs="hvc1"' />
@@ -267,6 +299,7 @@ export default function ProductBanner() {
                                 target="_blank"
                                 rel="noreferrer"
                                 className="my-6 text-center mx-auto flex items-center justify-center rounded-full bg-[#00BD67] px-6 py-3 text-sm font-semibold text-black transition-colors w-fit"
+                                viewport={retriggerViewport}
                             >
                                 Try Now
                             </motion.a>
@@ -300,6 +333,10 @@ export default function ProductBanner() {
                                             delay: 0.4,
                                         }}
                                         alt="CubePlus Web Platform"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        draggable={false}
                                         style={{
                                             opacity: opacity1,
                                             scale: scale1,
@@ -307,8 +344,9 @@ export default function ProductBanner() {
                                             rotateX: rotateX1,
                                             filter: filter1,
                                             transformStyle: "preserve-3d",
+                                            ...animatedLayerStyle,
                                         }}
-                                        className="w-[100%] h-auto object-contain drop-shadow-2xl will-change-transform origin-center"
+                                        className="w-[100%] h-auto object-contain drop-shadow-2xl will-change-transform transform-gpu origin-center"
                                     />
                                 </div>
 
@@ -317,64 +355,85 @@ export default function ProductBanner() {
                                     className="absolute inset-0 flex items-center justify-center"
                                     style={{
                                         y: y1,
+                                        willChange: "transform",
                                     }}
                                 >
                                     {/* Top Left Screen */}
                                     <motion.img
                                         src={"/one.png"}
                                         alt="Screen 1"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
                                             x: img1X,
                                             y: img1Y,
                                             scale: fourImagesScale,
                                             filter: fourImagesBlur,
+                                            ...animatedLayerStyle,
                                         }}
-                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
+                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform transform-gpu border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
                                     />
                                     {/* Top Right Screen */}
                                     <motion.img
                                         src={"/two.png"}
                                         alt="Screen 2"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
                                             x: img2X,
                                             y: img2Y,
                                             scale: fourImagesScale,
                                             filter: fourImagesBlur,
+                                            ...animatedLayerStyle,
                                         }}
-                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
+                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform transform-gpu border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
                                     />
                                     {/* Bottom Left Screen */}
                                     <motion.img
                                         src={"/three.png"}
                                         alt="Screen 3"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
                                             x: img3X,
                                             y: img3Y,
                                             scale: fourImagesScale,
                                             filter: fourImagesBlur,
+                                            ...animatedLayerStyle,
                                         }}
-                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
+                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform transform-gpu border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
                                     />
                                     {/* Bottom Right Screen */}
                                     <motion.img
                                         src={"/four.png"}
                                         alt="Screen 4"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
                                             x: img4X,
                                             y: img4Y,
                                             scale: fourImagesScale,
                                             filter: fourImagesBlur,
+                                            ...animatedLayerStyle,
                                         }}
-                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
+                                        className="absolute w-[240px] sm:w-[300px] md:w-[380px] lg:w-[520px] h-auto object-contain rounded-xl overflow-hidden will-change-transform transform-gpu border-2 border-white/40 ring-2 ring-white/25 shadow-[0_0_40px_rgba(15,23,42,0.9)]"
                                     />
                                 </motion.div>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </div >
