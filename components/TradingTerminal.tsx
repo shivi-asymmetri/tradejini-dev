@@ -24,7 +24,11 @@ const REVEAL_DURATION = 0.85;
 const HEADER_DURATION = 0.9;
 const REVEAL_VIEWPORT = { once: false, amount: 0.2 };
 const CARD_VIEWPORT = { once: false, amount: 0.18 };
-const DESKTOP_SEQUENCE_VIEWPORT = { amount: 0.2, margin: "0px 0px -10% 0px" };
+/** Negative % is valid for IntersectionObserver but narrower than framer-motion's MarginType. */
+const DESKTOP_SEQUENCE_VIEWPORT = {
+  amount: 0.2,
+  margin: "0px 0px -10% 0px",
+} as NonNullable<Parameters<typeof useInView>[1]>;
 
 const TERMINALS: Terminal[] = [
   {
