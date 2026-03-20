@@ -4,12 +4,7 @@ import FeaturesGrid from "@/components/FeatureList";
 import ProductShowcaseComponent from "@/components/ProductShowcase";
 import StayConnectedPage from "@/components/StayConnected";
 import TradingTerminals from "@/components/TradingTerminal";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import ProductBanner from "./ProductBanner";
 import ProductBanner2 from "./ProductBanner2";
 
 export default function Products() {
