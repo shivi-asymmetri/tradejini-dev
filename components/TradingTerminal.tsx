@@ -1,6 +1,11 @@
 "use client";
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useInView,
+  usePresence,
+} from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Terminal = {
@@ -19,6 +24,7 @@ const REVEAL_DURATION = 0.85;
 const HEADER_DURATION = 0.9;
 const REVEAL_VIEWPORT = { once: false, amount: 0.2 };
 const CARD_VIEWPORT = { once: false, amount: 0.18 };
+const DESKTOP_SEQUENCE_VIEWPORT = { amount: 0.2, margin: "0px 0px -10% 0px" };
 
 const TERMINALS: Terminal[] = [
   {
@@ -30,7 +36,7 @@ const TERMINALS: Terminal[] = [
     termColor: "#3db5a8",
     image: "/listings/terminal-1.png",
     webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.webm",
-    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.mp4",
+    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/a7c28a77-a54f-434b-b262-7a069259ba28.mp4",
   },
   {
     title: "Option",
@@ -181,57 +187,111 @@ const TerminalVideo = memo(function TerminalVideo({
   terminal,
   className,
   preload = "metadata",
+  shouldPlay,
+  loop = false,
+  onEnded,
 }: {
   terminal: Terminal;
   className: string;
   preload?: "none" | "metadata" | "auto";
+  shouldPlay: boolean;
+  loop?: boolean;
+  onEnded?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const isInView = useInView(videoRef, { amount: 0.2, once: false });
 
   useEffect(() => {
     const video = videoRef.current;
+    if (!video || loop) return;
 
+    const paintPausedFrame = () => {
+      const v = videoRef.current;
+      if (!v || loop || shouldPlay) return;
+      v.pause();
+      try {
+        v.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    };
+
+    video.addEventListener("loadeddata", paintPausedFrame);
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      paintPausedFrame();
+    }
+    return () => video.removeEventListener("loadeddata", paintPausedFrame);
+  }, [shouldPlay, loop, terminal.mp4, terminal.webm]);
+
+  useEffect(() => {
+    const video = videoRef.current;
     if (!video) return;
 
-    if (isInView) {
+    video.loop = loop;
+
+    if (shouldPlay) {
       void video.play().catch(() => {});
       return;
     }
 
     video.pause();
-  }, [isInView, terminal.mp4, terminal.webm]);
+    if (!loop) {
+      try {
+        video.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [shouldPlay, loop, terminal.mp4, terminal.webm]);
 
   return (
     <video
       ref={videoRef}
       className={className}
-      autoPlay
-      loop
+      loop={loop}
       muted
       playsInline
       preload={preload}
-      poster={terminal.image}
       disablePictureInPicture
+      onEnded={onEnded}
       style={{
         backgroundColor: "transparent",
-        willChange: "transform",
-        transform: "translateZ(0)",
-        backfaceVisibility: "hidden",
       }}
     >
-      <source src={terminal.mp4} type='video/mp4; codecs="hvc1"' />
       <source src={terminal.webm} type="video/webm" />
+      <source src={terminal.mp4} type="video/mp4" />
     </video>
+  );
+});
+
+const MobileCarouselVideo = memo(function MobileCarouselVideo({
+  terminal,
+  className,
+}: {
+  terminal: Terminal;
+  className: string;
+}) {
+  const [isPresent] = usePresence();
+  return (
+    <TerminalVideo
+      terminal={terminal}
+      className={className}
+      preload="auto"
+      shouldPlay={isPresent}
+      loop
+    />
   );
 });
 
 const DesktopTerminalCard = memo(function DesktopTerminalCard({
   terminal,
   index,
+  shouldPlay,
+  onVideoEnded,
 }: {
   terminal: Terminal;
   index: number;
+  shouldPlay: boolean;
+  onVideoEnded: () => void;
 }) {
   return (
     <motion.div
@@ -277,7 +337,10 @@ const DesktopTerminalCard = memo(function DesktopTerminalCard({
         <TerminalVideo
           terminal={terminal}
           className="h-full w-full object-cover"
-          preload="metadata"
+          preload={shouldPlay ? "auto" : "metadata"}
+          shouldPlay={shouldPlay}
+          loop={false}
+          onEnded={onVideoEnded}
         />
       </div>
     </motion.div>
@@ -287,6 +350,25 @@ const DesktopTerminalCard = memo(function DesktopTerminalCard({
 const TradingTerminals = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0); // 1 for next, -1 for previous
+  const [desktopPlayingIndex, setDesktopPlayingIndex] = useState(0);
+  const desktopGridRef = useRef<HTMLDivElement>(null);
+  const isDesktopGridInView = useInView(desktopGridRef, DESKTOP_SEQUENCE_VIEWPORT);
+  const desktopGridInViewRef = useRef(isDesktopGridInView);
+
+  useEffect(() => {
+    desktopGridInViewRef.current = isDesktopGridInView;
+  }, [isDesktopGridInView]);
+
+  useEffect(() => {
+    if (!isDesktopGridInView) {
+      setDesktopPlayingIndex(0);
+    }
+  }, [isDesktopGridInView]);
+
+  const advanceDesktopVideo = useCallback(() => {
+    if (!desktopGridInViewRef.current) return;
+    setDesktopPlayingIndex((i) => (i + 1) % TERMINALS.length);
+  }, []);
 
   const goToNext = useCallback(() => {
     setDirection(1);
@@ -309,43 +391,25 @@ const TradingTerminals = () => {
   const activeTerminal = TERMINALS[activeIndex];
 
   return (
-    <div className="flex flex-col items-center bg-white px-4 pt-6 sm:px-6 md:px-8 md:pt-20">
+    <div className="flex flex-col items-center bg-white px-4 pt-6 sm:px-6 md:px-8 md:pt-12">
       {/* Header */}
-      {/* Mobile View - Slide from Bottom */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={REVEAL_VIEWPORT}
         variants={headerBottomVariants}
-        className="mb-8 flex max-w-4xl flex-col items-start gap-3 text-left md:hidden"
+        className="mb-8 flex max-w-4xl flex-col items-start gap-3 text-left md:text-center"
         style={surfaceMotionStyle}
       >
-        <h1 className="text-left text-black/99 text-2xl font-semibold sm:text-4xl">
+        <h1 className="text-left text-black/99 text-2xl font-semibold sm:text-4xl md:text-5xl">
           Dedicated Trading Terminals
         </h1>
-        <p className="text-gray-400 text-base font-medium sm:text-lg">
+        <p className="text-gray-400 text-base font-medium sm:text-lg md:text-lg lg:text-xl">
           We&apos;ve built specialized terminals for traders who demand
           precision and focus
         </p>
       </motion.div>
 
-      {/* Desktop View - Slide from Left */}
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={REVEAL_VIEWPORT}
-        transition={{ duration: HEADER_DURATION, delay: 0.12, ease: REVEAL_EASE }}
-        className="mb-8 hidden max-w-4xl flex-col items-start gap-3 text-left md:flex md:items-center md:text-center md:mb-10 md:gap-5"
-        style={surfaceMotionStyle}
-      >
-        <h1 className="text-left md:text-center text-black/99 text-2xl font-semibold sm:text-4xl md:text-5xl">
-          Dedicated Trading Terminals
-        </h1>
-        <p className="text-gray-400 text-base font-medium sm:text-lg">
-          We&apos;ve built specialized terminals for traders who demand
-          precision and focus
-        </p>
-      </motion.div>
 
       {/* Mobile Carousel View */}
       <div className="lg:hidden w-full max-w-[1300px]">
@@ -399,10 +463,9 @@ const TradingTerminals = () => {
 
                   {/* Image */}
                   <div className="h-48 w-full max-w-lg overflow-hidden rounded-lg sm:h-64">
-                    <TerminalVideo
+                    <MobileCarouselVideo
                       terminal={activeTerminal}
                       className="h-full w-full object-cover"
-                      preload="auto"
                     />
                   </div>
                 </div>
@@ -433,19 +496,30 @@ const TradingTerminals = () => {
       </div>
 
       {/* Desktop Grid View */}
-      <div className="max-lg:hidden overflow-hidden flex w-full max-w-[80rem] mx-auto flex-col gap-4 md:gap-5">
+      <div
+        ref={desktopGridRef}
+        className="max-lg:hidden overflow-hidden flex w-full max-w-[80rem] mx-auto flex-col gap-4 md:gap-5"
+      >
         {[0, 2].map((start) => (
           <div
             key={start}
             className="grid grid-cols-1 gap-4 md:gap-5 lg:grid-cols-2"
           >
-            {TERMINALS.slice(start, start + 2).map((terminal, index) => (
-              <DesktopTerminalCard
-                key={terminal.title}
-                terminal={terminal}
-                index={index}
-              />
-            ))}
+            {TERMINALS.slice(start, start + 2).map((terminal, sliceIndex) => {
+              const absoluteIndex = start + sliceIndex;
+              return (
+                <DesktopTerminalCard
+                  key={terminal.title}
+                  terminal={terminal}
+                  index={sliceIndex}
+                  shouldPlay={
+                    isDesktopGridInView &&
+                    desktopPlayingIndex === absoluteIndex
+                  }
+                  onVideoEnded={advanceDesktopVideo}
+                />
+              );
+            })}
           </div>
         ))}
       </div>
