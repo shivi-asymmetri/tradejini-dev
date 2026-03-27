@@ -40,7 +40,7 @@ const TERMINALS: Terminal[] = [
     termColor: "#3db5a8",
     image: "/listings/terminal-1.png",
     webm: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.webm",
-    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/a7c28a77-a54f-434b-b262-7a069259ba28.mp4",
+    mp4: "https://5bxzwezzqwfyfzs4.public.blob.vercel-storage.com/terminal-1.mp4",
   },
   {
     title: "Option",
@@ -254,15 +254,19 @@ const TerminalVideo = memo(function TerminalVideo({
       loop={loop}
       muted
       playsInline
+      webkit-playsinline="true"
       preload={preload}
       disablePictureInPicture
       onEnded={onEnded}
       style={{
-        backgroundColor: "transparent",
+        backgroundColor:"transparent",
+        willChange: "transform",
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
       }}
     >
       <source src={terminal.webm} type="video/webm" />
-      <source src={terminal.mp4} type="video/mp4" />
+      <source src={terminal.mp4} type='video/mp4' />
     </video>
   );
 });

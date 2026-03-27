@@ -333,9 +333,6 @@ export default function ProductBanner() {
                                             delay: 0.4,
                                         }}
                                         alt="CubePlus Web Platform"
-                                        loading="eager"
-                                        decoding="async"
-                                        fetchPriority="high"
                                         draggable={false}
                                         style={{
                                             opacity: opacity1,
@@ -362,9 +359,6 @@ export default function ProductBanner() {
                                     <motion.img
                                         src={"/one.png"}
                                         alt="Screen 1"
-                                        loading="eager"
-                                        decoding="async"
-                                        fetchPriority="high"
                                         draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
@@ -380,9 +374,6 @@ export default function ProductBanner() {
                                     <motion.img
                                         src={"/two.png"}
                                         alt="Screen 2"
-                                        loading="eager"
-                                        decoding="async"
-                                        fetchPriority="high"
                                         draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
@@ -398,9 +389,6 @@ export default function ProductBanner() {
                                     <motion.img
                                         src={"/three.png"}
                                         alt="Screen 3"
-                                        loading="eager"
-                                        decoding="async"
-                                        fetchPriority="high"
                                         draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
@@ -416,9 +404,6 @@ export default function ProductBanner() {
                                     <motion.img
                                         src={"/four.png"}
                                         alt="Screen 4"
-                                        loading="eager"
-                                        decoding="async"
-                                        fetchPriority="high"
                                         draggable={false}
                                         style={{
                                             opacity: fourImagesOpacity,
